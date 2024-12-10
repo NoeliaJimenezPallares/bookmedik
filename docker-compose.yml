@@ -1,0 +1,41 @@
+services:
+
+  app:
+    build: ./build
+    container_name: bookmedik-contenedor
+    image: noelia/bookmedik:v1
+    restart: always
+    environment:
+       DB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+       DB_HOST: ${DB_HOST}
+       DB_NAME: ${DB_NAME}
+       DB_USER: ${DB_USER}
+       DB_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "8080:80"
+    depends_on:
+      - db
+    networks:
+      - red_bookmedik
+
+  db:
+    container_name: servidor_mysql
+    image: mariadb:latest
+    restart: always
+    environment:
+       MARIADB_ROOT_PASSWORD: ${DB_ROOT_PASSWORD}
+       MARIADB_NAME: ${DB_NAME}
+       MARIADB_USER: ${DB_USER}
+       MARIADB_PASSWORD: ${DB_PASSWORD}
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    networks:
+      - red_bookmedik
+
+volumes:
+  mariadb_data:
+
+networks:
+ red_bookmedik:
+
+
